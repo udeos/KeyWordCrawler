@@ -1,28 +1,35 @@
 from queue import Queue
-from threading import Thread
+import threading
+import multiprocessing
 
 
-class ThreadProcessor:
+class ThreadCallbackHandler:
 
-    def __init__(self, callback, concurrency=1):
+    def __init__(self, callback, threads=1):
         self.callback = callback
-        self.concurrency = concurrency
-        self.queue = Queue(self.concurrency * 2)
+        self.threads = threads
+        self.queue = Queue(self.threads * 2)
 
-    def process(self, items):
-        self._spawn_daemons()
+    def handle(self, items):
+        for i in range(self.threads):
+            t = threading.Thread(target=self._daemon_worker)
+            t.daemon = True
+            t.start()
         for item in items:
             self.queue.put(item)
         self.queue.join()
 
-    def _spawn_daemons(self):
-        for i in range(self.concurrency):
-            t = Thread(target=self.daemon_worker)
-            t.daemon = True
-            t.start()
-
-    def daemon_worker(self):
+    def _daemon_worker(self):
         while True:
             item = self.queue.get()
             self.callback(item)
             self.queue.task_done()
+
+
+
+class ProcessCallbackHandler:
+
+    def __init__(self, processes=1):
+        self.processes = processes
+
+    # def handle(self, ):

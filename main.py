@@ -1,6 +1,6 @@
 from time import time
 
-from core import ThreadProcessor
+from core import ThreadCallbackHandler, ProcessCallbackHandler
 
 
 if __name__ == '__main__':
@@ -9,6 +9,15 @@ if __name__ == '__main__':
         print(response)
 
     t = time()
-    rp = ThreadProcessor(callback, 3)
-    rp.process(['http://ping.eu/'] * 100)
+    tch = ThreadCallbackHandler(callback, 10)
+    tch.handle(['http://ping.eu/'] * 10)
     print(time() - t)
+
+    def parse_m1():
+        pass
+
+    def parse_m2():
+        pass
+
+    pch = ProcessCallbackHandler(2)
+
