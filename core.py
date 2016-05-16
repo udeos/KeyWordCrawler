@@ -17,7 +17,7 @@ class ThreadCallbackHandler:
             t.start()
         for item in items:
             self.queue.put(item)
-        self.queue.join()
+        # self.queue.join()
 
     def _daemon_worker(self):
         while True:
@@ -25,11 +25,3 @@ class ThreadCallbackHandler:
             self.callback(item)
             self.queue.task_done()
 
-
-
-class ProcessCallbackHandler:
-
-    def __init__(self, processes=1):
-        self.processes = processes
-
-    # def handle(self, ):
