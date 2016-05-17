@@ -12,8 +12,9 @@ class BaseCrawler:
         self.host = settings.HOST
         self.daemons = settings.DAEMONS_COUNT
         self.queue = Queue()
-        self._spawn_daemons()
         self.last_requests = deque([time.time()], maxlen=settings.RPS)
+
+        self._spawn_daemons()
 
     def _spawn_daemons(self):
         for _ in range(self.daemons):
@@ -32,11 +33,8 @@ class BaseCrawler:
             self.callback(item, conn)
             self.queue.task_done()
 
-    def process(self, item):
-        self.queue.put(item)
-
-    def wait(self):
-        self.queue.task_done()
-
     def callback(self, item, conn):
+        raise NotImplementedError
+
+    def process(self):
         raise NotImplementedError

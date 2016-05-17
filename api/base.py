@@ -1,6 +1,15 @@
-from urllib import request
+from http import client
 
 
 class BaseApi:
-    def request(self, uri, params, method='GET', conn=None):
-        pass
+
+    def __init__(self, host, token):
+        self.host = host
+        self.token = token
+
+    def request(self, uri, body=None, headers={}, method='GET', conn=None):
+        if conn:
+            conn = client.HTTPSConnection(self.host)
+        conn.request(method, uri, body, headers)
+        response = conn.getresponse()
+        return response.status, response.read()

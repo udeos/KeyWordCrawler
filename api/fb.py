@@ -1,13 +1,13 @@
 from .base import BaseApi
 
+from urllib import parse
+
 
 class FbApi(BaseApi):
-
-    def __init__(self, token, host):
-        self.token = token
-        self.host = host
 
     def get_user(self, uid, fields, conn=None):
         uri = '/{uid}/'.format(uid=uid)
         params = {'fields': fields}
-        response = self.request(uri, params, conn=conn)
+        params = parse.urlencode(params)
+        status, response = self.request(uri, params, conn=conn)
+        return response

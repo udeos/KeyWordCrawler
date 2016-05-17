@@ -1,7 +1,7 @@
-from .crawlers.fb import FbCrawler
+from crawlers.fb import ProfileCrawler
 
-from . import settings
+import settings
 
 
-crawler = FbCrawler(settings)
-crawler.queue
+crawler = ProfileCrawler(settings)
+crawler.process()
